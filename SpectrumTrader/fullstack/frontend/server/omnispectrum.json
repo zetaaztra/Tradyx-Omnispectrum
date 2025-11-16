@@ -1,0 +1,38 @@
+{
+  "close": 23345,
+  "lastUpdate": "05:30 IST",
+  "modelVersion": "v1.0.0",
+  "modelDate": "2025-01-15",
+  "mae": 42.5,
+  "tiles": {
+    "tomorrow_expected_move_pts": 120,
+    "twoday_expected_move_pts": 75,
+    "threeday_expected_move_pts": -45,
+    "weekly_range_pts": [-180, 410],
+    "monthly_range_pts": [-520, 890],
+    "directional_tilt": "BULLISH",
+    "short_term_envelope": [-85, 145],
+    "medium_term_envelope": [-220, 380],
+    "volatility_expansion_prob": 0.28,
+    "option_sellers_status": "FAVORABLE",
+    "option_buyers_status": "CAUTION",
+    "pattern_match_index": 82,
+    "composite_summary": "Tomorrow expected +120 pts. This week midpoint +350 pts (23100–23590). Sellers: Favorable. Buyers: Caution."
+  },
+  "forecasts": {
+    "tomorrow": {
+      "median": 120,
+      "p10": 45,
+      "p90": 195
+    }
+  },
+  "historicalClose": [
+    23120, 23145, 23098, 23175, 23210, 23198, 23245, 23268, 23290, 23312,
+    23295, 23320, 23308, 23285, 23310, 23335, 23298, 23275, 23290, 23315,
+    23305, 23285, 23270, 23295, 23310, 23325, 23315, 23330, 23340, 23345
+  ],
+  "historicalPatternMatch": [
+    68, 71, 69, 74, 76, 78, 75, 79, 81, 77, 
+    80, 82, 84, 83, 85, 84, 82, 80, 78, 82
+  ]
+}

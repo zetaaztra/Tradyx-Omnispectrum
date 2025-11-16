@@ -1,0 +1,128 @@
+{
+  "timestamp": "2025-11-16T07:21:05.622161Z",
+  "close": 25910.05078125,
+  "currentSpot": 25910.05078125,
+  "currentVIX": 15.0,
+  "historicalClose": [
+    24836.3,
+    24894.25,
+    25077.65,
+    25108.3,
+    25046.15,
+    25181.8,
+    25285.35,
+    25227.35,
+    25145.5,
+    25323.55,
+    25585.3,
+    25709.85,
+    25843.15,
+    25868.6,
+    25891.4,
+    25795.15,
+    25966.05,
+    25936.2,
+    26053.9,
+    25877.85,
+    25722.1,
+    25763.35,
+    25597.65,
+    25509.7,
+    25492.3,
+    25574.35,
+    25694.95,
+    25875.8,
+    25879.15,
+    25910.05
+  ],
+  "historicalPatternMatch": [
+    0.8946,
+    0.9171,
+    0.9122,
+    0.4445,
+    0.2171,
+    0.666,
+    0.6098,
+    0.3597,
+    0.0266,
+    0.3241,
+    0.4942,
+    0.653,
+    0.6872,
+    0.424,
+    0.8932,
+    0.6522,
+    0.9287,
+    0.791,
+    0.1932,
+    0.9611
+  ],
+  "lastUpdate": "just now",
+  "spotPrice": {
+    "current": 25910.05,
+    "change_percent": 0.0,
+    "ohlc": {
+      "open": 25910.05078125,
+      "high": 25910.05078125,
+      "low": 25910.05078125,
+      "close": 25910.05078125
+    }
+  },
+  "indiaVIX": {
+    "current": 15.0,
+    "change_percent": 0.0,
+    "ohlc": {
+      "open": 15.0,
+      "high": 15.0,
+      "low": 15.0,
+      "close": 15.0
+    }
+  },
+  "tiles": {
+    "tomorrow_expected_move_pts": 123.79,
+    "twoday_expected_move_pts": 175.07,
+    "threeday_expected_move_pts": 214.42,
+    "weekly_range_pts": [
+      25633.24,
+      26186.86
+    ],
+    "monthly_range_pts": [
+      25342.76,
+      26477.34
+    ],
+    "directional_tilt": {
+      "bear": 6.66658123441916e-52,
+      "neutral": 1.0,
+      "bull": 1.8643797013344648e-97
+    },
+    "short_term_envelope": [
+      25786.26,
+      26033.84
+    ],
+    "medium_term_envelope": [
+      25633.24,
+      26186.86
+    ],
+    "volatility_expansion_prob": 2.815301501427861e-05,
+    "pattern_match_index": 0.4933,
+    "regime_free_trend_strength": 0.004483,
+    "composite_summary": {
+      "tilt_map": {
+        "bear": 6.66658123441916e-52,
+        "neutral": 1.0,
+        "bull": 1.8643797013344648e-97
+      },
+      "expected_moves": {
+        "tomorrow": 123.79,
+        "2d": 175.07,
+        "3d": 214.42,
+        "week": 276.81,
+        "next_week": 327.53,
+        "month": 567.29
+      },
+      "expansion_prob": 2.815301501427861e-05,
+      "pattern_match": 0.4933,
+      "trend_strength": 0.004483
+    }
+  }
+}

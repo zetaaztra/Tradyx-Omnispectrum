@@ -1,0 +1,438 @@
+High-level goals & UX rules
+
+Primary user: retail intraday & short-term traders who only look at points and a one-line verdict. UI must surface numeric point forecasts prominently, then supportive visuals (range bands, mini-charts) secondarily.
+
+Tone: institutional, authoritative, minimal noise — users must feel “secure” (calm UI, clear numbers).
+
+Must avoid probabilistic jargon on primary elements — show point values and simple labels (UP / DOWN / FLAT / SELLERS: OK / BUYERS: CAUTION). Under-the-hood JSON stores probabilities; expose only via a secondary detail panel or tooltip.
+
+Accessibility: sufficient contrast in both modes, keyboard focusability, readable sizes.
+
+Performance: static JSON fetch on load and periodic refresh (30m) — animations are subtle (no heavy DOM work). Use next/image sparingly; charts rendered in canvas or SVG (Recharts / Chart.js).
+
+2 — Tech stack (recommended)
+
+Framework: Next.js 14 (App Router) — server-side static site generation for fast loads; Cloudflare Pages can serve static built output.
+
+Styling: Tailwind CSS (utility-first, consistent tokens).
+
+Charts & gauges: Recharts (React, SVG) for mini charts and area bands; React-SVG-Gauge or custom SVG gauge for numeric dial; for advanced interactive charts Chart.js (react-chartjs-2) or Plotly optional but heavier.
+
+Animations: Framer Motion for subtle transitions (tile entrance, gauge sweep).
+
+Icons: Lucide / Heroicons (open-source).
+
+Fonts: see Typography below (Inter + Space Mono).
+
+State & data: simple React hooks + SWR for data fetch/cache and revalidation.
+
+Build & CI: GitHub Actions for inference (writes JSON), Cloudflare Pages for hosting.
+
+3 — Typography (recommended free fonts)
+
+UI font (primary): Inter — modern, neutral, variable/weights. Use for most UI text.
+
+sizes: Body = 14px, small = 12px, large labels = 16–18px, tile titles = 14–16px.
+
+Numeric / Monospaced Display: Space Mono or IBM Plex Mono for the big point numbers to emphasize numeric clarity. Use a large weight for the main forecast.
+
+Font weights & scale (desktop baseline):
+
+h1 / large numbers: font-family: "Space Mono", Inter; font-weight: 700; font-size: 48px
+
+tile title: Inter, 14px, 600
+
+body: Inter, 14px, 400
+
+caption: Inter, 12px, 400
+
+Accessibility: min text contrast ratio WCAG AA. Use semi-bold for short labels.
+
+4 — Color system & tokens
+
+Design principle: calm, high-contrast, and clear semantic colors for market direction.
+
+Dark mode (primary preferred)
+
+Background: --bg: #0B0F14 (near-black, not pure)
+
+Surface (cards): --card: #0E1620 (soft navy)
+
+Primary accent (Bull/positive): --bull: #67E480 (greenish)
+
+Bear/negative: --bear: #FF6B6B (muted red)
+
+Neutral / info: --neutral: #9AA7B2 (cool grey-blue)
+
+Highlight / range: --range: rgba(103,228,128,0.12) for bullish band, --range-bear: rgba(255,107,107,0.12) for bearish band
+
+Text primary: --text: #E6EEF3
+
+Muted text: --muted: #9FB0BD
+
+Accent for UI controls: --accent: #6BC7FF (cyan)
+
+Light mode (secondary)
+
+Background: --bg: #F6F9FB
+
+Surface: --card: #FFFFFF
+
+Text primary: #0B1720
+
+Bull: #017A3A (deeper green)
+
+Bear: #B00020 (deep red)
+
+Neutral: #556574
+
+Range fills: low-opacity greens/reds
+
+Design note: avoid bright saturated colors. Keep greens and reds slightly muted for accessibility and institutional look.
+
+5 — Layout & grid
+
+Overall grid (desktop)
+
+Page container width: max-width: 1280px centered.
+
+Primary grid: CSS grid grid-template-columns: 1fr 420px on wide screens. Left: main tiles; Right: summary / action panel. On narrow screens collapse to single-column.
+
+Tiles grid (main)
+
+Use 3-column grid for main tiles (desktop): grid-template-columns: repeat(3, 1fr); gap: 16px.
+
+Tiles sizes:
+
+Main FORECAST tile (Tomorrow point) — spans 2 columns × 2 rows (large prominent card top-left).
+
+Secondary numeric tiles (2-day, 3-day) — smaller cards, single cell adjacent.
+
+Range bands and envelopes are medium cards; PatternMatch and Signal tiles small cards.
+
+Mobile
+
+Single column, stacked ordering: Tomorrow → 2d → 3d → week → month → envelopes → option radars → pattern → composite sentence.
+
+6 — The 12 tiles — names, visuals, JSON mapping, and representation
+
+I give each tile name, visualization type, exact JSON key mapping (from omnispectrum.json you will output), and a short implementation note.
+
+Assumption: JSON shape uses tiles (as earlier). I map keys accordingly.
+
+Tile A (Primary)
+
+Tomorrow — Point Forecast
+
+UI type: Large numeric card + mini-line chart beneath (sparkline for last 30 closes).
+
+JSON key: tiles.tomorrow_expected_move_pts, close (to compute implied level)
+
+Display: Big center number (e.g., +120 pts) and below Implied price: 23465 (compute close + pts).
+
+Visual: number uses Space Mono 48px; color = --bull if positive, --bear if negative, --neutral (grey) if zero. Under number show a small sparkline with shaded tomorrow envelope.
+
+Interaction: hover tooltip shows hidden values (median, p10, p90) pulled from forecasts.tomorrow.median etc. (if present).
+
+Tile B
+
+2-Day — Point Forecast
+
+UI: Numeric + micro bar comparing magnitude to yesterday (small change arrow).
+
+JSON: tiles.2day_expected_move_pts
+
+Display: +75 pts with up/down arrow.
+
+Tile C
+
+3-Day — Point Forecast
+
+UI: Numeric with mini trend arrow and small confidence badge (green/amber/red depending on expansion_prob thresholds).
+
+JSON: tiles.3day_expected_move_pts and tiles.volatility_expansion_prob
+
+Note: show only label "Up / Down / Flat" to avoid probabilities for users.
+
+Tile D
+
+Weekly Range Projection
+
+UI: Horizontal range band chart: a bar where left = tiles.weekly_range_pts[0], right = [1], current price mark = vertical line in bar. Also show mid-point numeric.
+
+JSON: tiles.weekly_range_pts
+
+Representation: use a thin horizontal rectangle with gradient fill; annotate ends with numeric labels.
+
+Tile E
+
+Monthly Range Projection
+
+UI: Similar to weekly but wider and includes a small label 21 trading days.
+
+JSON: tiles.monthly_range_pts.
+
+Tile F
+
+Directional Tilt (User-friendly)
+
+UI: Traffic light horizontal: 3 segments (Bear — Neutral — Bull). Highlight the dominant segment.
+
+JSON: tiles.directional_tilt or tiles.directional_tilt from tilt_map — choose highest key.
+
+Display text: Market leaning: BULLISH (single phrase, no %), with small subtitle Model-derived for compliance.
+
+Tile G
+
+Short-Term Envelope (Tomorrow)
+
+UI: small candlestick sparkline with translucent band showing close ± tomorrow_EM. Use area shading (green if point>0, red if <0).
+
+JSON: tiles.short_term_envelope (array [low, high]) and close.
+
+Chart: use Recharts area / brushless small chart.
+
+Tile H
+
+Medium-Term Envelope (Weekly)
+
+UI: similar area chart using tiles.medium_term_envelope.
+
+Tile I
+
+Option Sellers Radar
+
+UI: compact status chip with label Sellers: Favorable / Neutral / Avoid and small supporting numbers (expected move vs. implied premium proxy).
+
+JSON: tiles.volatility_expansion_prob + tiles.composite_summary.expected_moves.week compare to a premium heuristic.
+
+Representation: use color-coded badge and small line icon.
+
+Tile J
+
+Option Buyers Radar
+
+UI: status chip Buyers: Favorable / Caution / Avoid. Compute similar logic but inverted for buyers.
+
+JSON: use tiles.composite_summary fields and expansion_prob.
+
+Tile K
+
+Pattern Match Index
+
+UI: Progress bar (0–100) labeled Pattern match: 82/100 and tooltip High similarity to historical setups.
+
+JSON: tiles.pattern_match_index (normalize to 0–100).
+
+Visual: small sparkline of historical match scores.
+
+Tile L
+
+Composite Plain-English Summary
+
+UI: Single-line bold sentence in large readable font: e.g., "Tomorrow expected +120 pts. This week midpoint +350 pts (23100–23590). Sellers: Neutral. Buyers: Caution."
+
+JSON: tiles.composite_summary and llm_text / or generated template if not using LLM.
+
+Behavior: Clicking the tile expands a modal with a simple 3-point explanation (Model date, last MAE, safety cap), and a visible disclaimer block.
+
+7 — Visual hierarchy & emphasis
+
+Primary visual: Tile A (Tomorrow) — occupies largest screen real estate and is the focal point.
+
+Secondary: Range tiles (weekly/monthly), envelopes — provide context.
+
+Tertiary: Option radars, pattern index, composite sentence.
+
+Color-coded but muted: green/red used sparingly for semantics, not decoration.
+
+8 — Dark vs Light mode specifics
+
+Dark mode (recommended default)
+
+Card background: --card navy (#0E1620) with 1px soft border rgba(255,255,255,0.03).
+
+Primary numbers: --text white; positive numbers --bull highlighted with soft glow (box-shadow: 0 6px 20px rgba(103,228,128,0.12)) to create calm reassurance.
+
+Range bands: semi-transparent fills; bullish fill rgba(103,228,128,0.12), bearish rgba(255,107,107,0.10), neutral rgba(155,165,173,0.06).
+
+Sparkline strokes: --accent (cyan) for upward trending; --neutral for flat.
+
+Gauge/Traffic light: subtle neon border.
+
+Micro-animations: gauge sweep on value change (0.5s ease-out), tile load fade + upward translate (framer-motion).
+
+Light mode
+
+Card background: white #ffffff, shadow 0 6px 18px rgba(14,22,32,0.06).
+
+Primary numbers: #0B1720 text; bull color #017A3A, bear #B00020.
+
+Range fills: very light greens/red tints.
+
+Keep same iconography & layout, invert glow to drop-shadow.
+
+9 — Component & implementation blueprint (Next.js + Tailwind)
+
+Component tree (suggested)
+
+app/page.tsx (layout wrapper)
+
+<Header /> (logo, model version, last update)
+
+<Dashboard>
+
+<MainGrid> (grid of tiles)
+
+<TileTomorrow /> (big)
+
+<TileSmall /> x N (2-day, 3-day, etc.)
+
+<RightPanel>
+
+<CompositeCard />
+
+<AuditCard /> (MAE, model_date)
+
+<Footer /> (disclaimer)
+
+Data fetching (client): use SWR or useEffect polling:
+
+const { data } = useSWR('/data/omnispectrum.json', fetcher, { refreshInterval: 30 * 60 * 1000 });
+
+
+Bind components:
+
+<TodayTile pts={data.tiles.tomorrow_expected_move_pts} close={data.close} />
+
+
+Tailwind tokens (example) in tailwind.config.js:
+
+theme: {
+  extend: {
+    colors: {
+      bull: "#67E480",
+      bear: "#FF6B6B",
+      neutral: "#9AA7B2",
+      accent: "#6BC7FF",
+      bg: "#0B0F14",
+      card: "#0E1620"
+    },
+    fontFamily: {
+      sans: ["Inter", "ui-sans-serif", "system-ui"],
+      mono: ["Space Mono", "ui-monospace", "SFMono-Regular"]
+    }
+  }
+}
+
+
+Mini example JSX for Tomorrow tile:
+
+export default function TileTomorrow({ pts, close }) {
+  const implied = Math.round(close + pts);
+  const signClass = pts > 0 ? 'text-bull' : pts < 0 ? 'text-bear' : 'text-neutral';
+  return (
+    <div className="bg-card rounded-xl p-6 shadow-sm">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Tomorrow</h3>
+        <span className="text-xs text-muted">Updated 05:30</span>
+      </div>
+      <div className="mt-3 flex items-baseline gap-4">
+        <span className={`font-mono text-4xl ${signClass}`}>{pts > 0 ? `+${pts}` : `${pts}`} pts</span>
+        <div className="text-xs text-muted">Implied: {implied}</div>
+      </div>
+      <Sparkline dataKey="close" data={history} range={[close - pts, close + pts]} />
+    </div>
+  );
+}
+
+10 — Chart & gauge choices (tools & justifications)
+
+Sparklines & small charts: Recharts (lightweight, SVG, responsive).
+
+Range bands: Recharts AreaChart with custom ReferenceLine for current price and filled Area for envelope.
+
+Gauge / Dial for expansion prob: custom SVG ring with Framer Motion for sweep (fast, small).
+
+Traffic-light tilt display: simple CSS grid with 3 cells, dynamic background color.
+
+Pattern match progress bar: Tailwind width % with transition.
+
+Modal detail: Plotly for larger interactive chart on demand (optional and lazy-loaded).
+
+11 — Micro-interactions & motion
+
+Tile entrance: fade + translateY 8px (duration 360ms).
+
+Value update (numbers): subtle count-up animation (0.6s).
+
+Gauge sweep: ease-out sweeping arc (0.6s).
+
+Range changes: animated area morphing (animate area path with framer-motion or CSS transitions).
+
+Keep motion restrained to avoid distraction.
+
+12 — Accessibility & localization
+
+All color-coded info must have text alternatives (e.g., show BULLISH label) for color-blind users.
+
+Font sizes scalable with browser zoom; tiles responsive.
+
+ARIA labels for interactive elements and tooltips.
+
+Date/time shown with timezone (IST) and ISO timestamp in audit modal.
+
+13 — Data-binding: exact JSON → UI mapping (table)
+Tile	JSON path	Displayed element
+Tomorrow points	tiles.tomorrow_expected_move_pts + close	Big number +120 pts, implied price close+pts
+2-day points	tiles.2day_expected_move_pts	numeric
+3-day points	tiles.3day_expected_move_pts	numeric
+Weekly Range	tiles.weekly_range_pts	left/right numbers + horizontal band
+Monthly Range	tiles.monthly_range_pts	band
+Directional Tilt	tiles.directional_tilt or tiles.composite_summary.tilt_map	label (Bullish/Neutral/Bearish)
+Short Envelope	tiles.short_term_envelope	shaded mini-chart
+Medium Envelope	tiles.medium_term_envelope	shaded mini-chart
+Expansion Prob	tiles.volatility_expansion_prob	gauge + semantic label
+Pattern Match	tiles.pattern_match_index	progress bar (0-100)
+Trend Strength	tiles.regime_free_trend_strength	small arrow + text (Up/Flat/Down)
+Composite text	tiles.composite_summary or llm_text	one-line sentence
+14 — Static assets & branding
+
+Logo: simple wordmark: TRADYXA (Inter semi-bold) + small logomark (abstract star / helix).
+
+Favicons: monochrome for dark/light variants.
+
+Imagery: avoid photos; prefer subtle starfield gradients for hero background (dark mode) and soft noise texture for light mode.
+
+15 — Implementation checklist (priority)
+
+Set up Next.js + Tailwind + Recharts + Framer Motion.
+
+Add global theme toggler (dark/light), set CSS variables.
+
+Build useSWR('/data/omnispectrum.json') hook.
+
+Implement Tile components mapping to JSON fields.
+
+Add Audit modal showing model_date + MAE + disclaimer.
+
+Add CI job (already provided earlier) to write data/omnispectrum.json.
+
+Accessibility and E2E checks.
+
+Performance: lazy-load heavy chart libs only in modal.
+
+16 — Example copy for the Composite tile (non-technical)
+
+Keep copy short and deterministic. Template:
+“Tomorrow: +120 pts (implied 23,465). 2-day: +75 pts. This week midpoint: +350 pts (23,100 — 23,590). Sellers: Neutral. Buyers: Caution. Not investment advice.”
+
+This is the only place where an LLM / template is used — the LLM must be constrained to fill placeholders only.
+
+17 — Final visual mock suggestions (quick)
+
+Desktop hero: big left card (Tomorrow), right column for summary & controls.
+
+Color & microcopy: use single-line labels like Implied price rather than technical terms.
+
+Animations: subtle; no flashing or blinking.

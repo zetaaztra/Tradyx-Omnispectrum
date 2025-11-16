@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-11-15T17:57:00Z",
+  "lastUpdate": "2 mins ago",
+  "close": 23345.67,
+  "historicalClose": [
+    23100, 23120, 23150, 23180, 23200, 23220, 23250, 23280, 23300, 23310,
+    23320, 23330, 23340, 23345, 23350, 23360, 23370, 23380, 23390, 23400,
+    23410, 23420, 23430, 23440, 23445, 23450, 23460, 23470, 23480, 23500
+  ],
+  "historicalPatternMatch": [35, 38, 40, 42, 39, 41, 43, 40, 42, 44, 41, 39, 40, 42, 38, 40, 41, 43, 40, 42],
+  "spotPrice": {
+    "current": 25917.05,
+    "change_percent": 0.15,
+    "ohlc": {
+      "open": 25767.90,
+      "high": 25939.65,
+      "low": 25740.80,
+      "close": 25915.75
+    }
+  },
+  "indiaVIX": {
+    "current": 11.96,
+    "change_percent": -1.22,
+    "ohlc": {
+      "open": 12.16,
+      "high": 12.44,
+      "low": 11.80,
+      "close": 11.96
+    }
+  },
+  "tiles": {
+    "tomorrow_expected_move_pts": 145.23,
+    "twoday_expected_move_pts": 205.67,
+    "threeday_expected_move_pts": 256.98,
+    "weekly_range_pts": [-245.45, 245.22],
+    "monthly_range_pts": [-745.55, 745.56],
+    "directional_tilt": {
+      "bear": 0.12,
+      "neutral": 0.34,
+      "bull": 0.54
+    },
+    "short_term_envelope": [-146.33, 146.33],
+    "medium_term_envelope": [-400.00, 400.34],
+    "volatility_expansion_prob": 0.23,
+    "pattern_match_index": 41.2,
+    "regime_free_trend_strength": 0.0023,
+    "option_sellers_status": "FAVORABLE",
+    "option_buyers_status": "NEUTRAL",
+    "composite_summary": "Market showing bullish bias with 54% bull probability. Expected move of +145 pts for tomorrow. Pattern match index at 41.2 indicates moderate precedent. Volatility expansion probability at 23%."
+  }
+}

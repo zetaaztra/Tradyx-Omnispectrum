@@ -1,0 +1,31 @@
+name: Omnispectrum Training
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * 0' # Sunday 11:30 PM IST
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run training
+        run: |
+          python src/train.py
+      - name: Commit and push models
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add models/
+          git commit -m "Weekly model update [auto]" || echo "No changes to commit"
+          git push

@@ -1,0 +1,96 @@
+DARK MODE — “Omni Spectrum”
+Primary Association:
+
+Void Black (#000008) + Prismatic Energy Accents (Cyan → Magenta → Violet)
+
+Why this is the only correct logic:
+
+“Omni Spectrum” means all wavelengths, but you cannot dump a rainbow in a dark UI — that looks childish.
+The professional interpretation is a spectral gradient along the high-energy end.
+
+In physics/optics, spectra on black appear as cyan, magenta, violet, electric blue — the high-frequency region.
+
+Dark backgrounds amplify spectral colors; this matches scientific imaging, spectroscopy, quantum visuals.
+
+Warm wavelengths (red, orange, yellow) create noise and kill the technical identity unless used extremely subtly.
+
+Dark Mode Palette: (Accurate + Professional)
+
+Background: #000008 (ultra-deep spectrum black)
+
+Primary Spectrum Highlight:
+
+Cyan (#00E5FF)
+
+Electric Blue (#2A6BFF)
+
+Magenta (#D400FF)
+
+Violet (#7A00FF)
+
+Secondary: #1A1E2A (cosmic charcoal)
+
+Glow Color: #06F7DD (spectral neon)
+
+Tone: scientific, quantum, prismatic, high-energy.
+
+LIGHT MODE — “Omni Spectrum”
+Primary Association:
+
+Clean White (#FFFFFF / #FAFAFF) + Structured, controlled spectral micro-gradients
+
+Why:
+
+Light-mode cannot use dark-space spectral visuals; they wash out.
+
+The logical identity becomes subtle, linear, fine-spectrum accents.
+
+Think spectroscopy charts, wavelength lines, thin frequency strips.
+
+Light Mode Palette:
+
+Background: #FAFAFF (near-white with faint blue bias)
+
+Primary Spectrum:
+
+Linear Blue → Purple gradient (#005CFF → #A000FF)
+
+Secondary: #2C2C2C (graphite for high contrast)
+
+Soft Spectrum Hints: Faint magenta/cyan micro-bands at 2–4% opacity
+
+Borders/Grid: #D5D8E0 (cool scientific grey)
+
+Tone: clean, analytical, wavelength-based, minimal.
+
+Blunt Evaluation
+
+If you choose:
+
+rainbow
+
+pastel tones
+
+warm neutrals
+
+flat blue or flat purple
+You effectively ruin the meaning of Omni Spectrum.
+The name demands energy, physics, and full-range spectral logic, not childish multicolor palettes.
+
+The correct identity is:
+
+Dark Mode: void-black + neon spectral highlights
+
+Light Mode: clean white + controlled spectral gradients
+
+This is mathematically and visually consistent with:
+
+optics
+
+spectroscopy
+
+quantum visualization
+
+scientific instrumentation UIs
+
+signal-processing dashboards
